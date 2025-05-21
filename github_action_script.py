@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 SPREADSHEET_ID = os.environ.get('SPREADSHEET_ID')
 RANGE_NAME = os.environ.get('RANGE_NAME')
 CREDENTIALS_FILE = 'service-account-key.json'  # GitHub Secret에서 생성된 파일
-N8N_WEBHOOK_URL = os.environ.get('N8N_WEBHOOK_URL', 'https://jayhay.app.n8n.cloud/webhook/article-content')
+N8N_WEBHOOK_URL = os.environ.get('N8N_WEBHOOK_URL')
 
 # 구글 시트 API 인증 및 서비스 생성
 def get_sheets_service():
