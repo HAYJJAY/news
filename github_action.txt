@@ -1,0 +1,38 @@
+name: Google News URL Extractor
+
+on:
+  schedule:
+    # 매시간 실행 (원하는 주기로 조정 가능)
+    - cron: '0 * * * *'
+  workflow_dispatch:  # 수동 실행 옵션 추가
+
+jobs:
+  extract-urls:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pandas requests google-api-python-client google-auth-httplib2 google-auth-oauthlib
+        pip install playwright
+        playwright install chromium
+        
+    - name: Setup service account credentials
+      run: |
+        echo "${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}" > service-account-key.json
+      
+    - name: Run URL extraction script
+      run: python github_action_script.py
+      env:
+        SPREADSHEET_ID: '1mGOy8CmEyU3fUZYmnhKcZcxHT_frBFZZEMxSZTx5NhQ'
+        RANGE_NAME: 'Sheet1!A:I'
+        N8N_WEBHOOK_URL: 'https://jayhay.app.n8n.cloud/webhook/article-content'
